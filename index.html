@@ -1,106 +1,39 @@
- 
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Movie/Series Cast Finder</title>
+  <title>Movie/Series Cast & Info</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    body {
-      background: linear-gradient(135deg, #f5a623 0%, #4a90e2 100%);
-      font-family: 'Poppins', Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      min-height: 100vh;
-    }
-    .container {
-      max-width: 700px;
-      margin: 40px auto;
-      background: #fff;
-      border-radius: 18px;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.15);
-      padding: 32px 20px 24px 20px;
-    }
-    .search-bar {
-      display: flex;
-      align-items: center;
-      margin-bottom: 24px;
-      gap: 10px;
-    }
-    .search-bar input {
-      flex: 1;
-      padding: 12px 16px;
-      border: 2px solid #4a90e2;
-      border-radius: 8px;
-      font-size: 1rem;
-      outline: none;
-      transition: border 0.2s;
-    }
-    .search-bar input:focus {
-      border-color: #f5a623;
-    }
-    .search-bar button {
-      background: linear-gradient(135deg, #f5a623 0%, #4a90e2 100%);
-      border: none;
-      border-radius: 8px;
-      padding: 12px 18px;
-      cursor: pointer;
-      color: #fff;
-      font-size: 1.2rem;
-      transition: background 0.2s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .search-bar button:hover {
-      background: linear-gradient(135deg, #4a90e2 0%, #f5a623 100%);
-    }
-    .cast-list {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 20px;
-    }
-    .cast-card {
-      background: #f9fafc;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(74,144,226,0.08);
-      padding: 16px;
-      text-align: center;
-      transition: transform 0.15s;
-    }
-    .cast-card:hover {
-      transform: translateY(-4px) scale(1.03);
-      box-shadow: 0 6px 20px rgba(245,166,35,0.10);
-    }
-    .cast-photo {
-      width: 90px;
-      height: 90px;
-      object-fit: cover;
-      border-radius: 50%;
-      margin-bottom: 12px;
-      background: #e0e0e0;
-      border: 2px solid #4a90e2;
-    }
-    .cast-name {
-      font-weight: 600;
-      font-size: 1.08rem;
-      color: #222;
-      margin-bottom: 4px;
-    }
-    .cast-character {
-      font-size: 0.97rem;
-      color: #4a90e2;
-      margin-bottom: 6px;
-    }
-    .cast-info {
-      font-size: 0.93rem;
-      color: #555;
-      min-height: 38px;
-    }
-    @media (max-width: 500px) {
-      .container { padding: 14px 3vw 18px 3vw; }
-      .search-bar input, .search-bar button { font-size: 1rem; padding: 10px; }
-      .cast-card { padding: 10px; }
+    body { background: #f6f8fa; font-family: 'Poppins', Arial, sans-serif; margin: 0; }
+    .container { max-width: 700px; margin: 30px auto; background: #fff; border-radius: 14px; box-shadow: 0 8px 32px rgba(0,0,0,0.13); padding: 20px 10px 30px 10px;}
+    .search-bar { display: flex; gap: 8px; margin-bottom: 20px; }
+    .search-bar input { flex: 1; padding: 12px; border-radius: 8px; border: 2px solid #4a90e2; font-size: 1rem; }
+    .search-bar button { background: #4a90e2; color: #fff; border: none; border-radius: 8px; padding: 0 16px; font-size: 1.2rem; cursor: pointer;}
+    .movie-info { display: flex; gap: 18px; margin-bottom: 20px; align-items: flex-start; }
+    .movie-poster { width: 120px; border-radius: 10px; box-shadow: 0 2px 8px rgba(74,144,226,0.09);}
+    .movie-details { flex: 1; }
+    .movie-title { font-size: 1.5rem; font-weight: 700; color: #222; margin: 0 0 5px 0;}
+    .movie-meta { color: #444; font-size: 1rem; margin-bottom: 7px;}
+    .movie-summary { color: #555; margin-bottom: 7px; font-size: 0.98rem;}
+    .movie-rating { color: #f5a623; font-weight: 600; font-size: 1.1rem;}
+    .cast-list { margin-top: 10px;}
+    details { background: #f9fafc; border-radius: 8px; margin-bottom: 10px; box-shadow: 0 1px 5px rgba(74,144,226,0.06);}
+    summary { cursor: pointer; display: flex; align-items: center; font-size: 1.05rem; font-weight: 500; padding: 12px; outline: none; }
+    summary::after { content: '▶'; margin-left: auto; transition: transform 0.2s; }
+    details[open] summary::after { transform: rotate(90deg);}
+    .cast-content { display: flex; gap: 14px; padding: 10px 14px 14px 14px; }
+    .cast-photo { width: 70px; height: 70px; border-radius: 50%; object-fit: cover; border: 2px solid #4a90e2; background: #e0e0e0;}
+    .cast-info { flex: 1; }
+    .cast-name { font-weight: 600; color: #222; font-size: 1.06rem;}
+    .cast-character { color: #4a90e2; font-size: 0.98rem; margin-bottom: 5px;}
+    .cast-bio { color: #555; font-size: 0.95rem;}
+    @media (max-width: 600px) {
+      .container { padding: 6px 2vw 16px 2vw;}
+      .movie-info { flex-direction: column; gap: 10px;}
+      .movie-poster { width: 90px;}
+      .cast-content { flex-direction: column; align-items: flex-start;}
+      .cast-photo { width: 60px; height: 60px;}
     }
   </style>
 </head>
@@ -108,29 +41,21 @@
   <div class="container">
     <form class="search-bar" id="searchForm" autocomplete="off">
       <input type="text" id="movieInput" placeholder="Type movie/series name and year (e.g. Inception 2010)" required>
-      <button type="submit" title="Search">
-        <svg height="22" width="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="11" cy="11" r="8"></circle>
-          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-        </svg>
-      </button>
+      <button type="submit" title="Search">🔍</button>
     </form>
-    <div id="castResult"></div>
+    <div id="movieResult"></div>
+    <div id="castResult" class="cast-list"></div>
   </div>
   <script>
-    // Insert your TMDB API key here
-    const TMDB_API_KEY = 'YOUR_TMDB_API_KEY';
+    const TMDB_API_KEY = 'bb0bd9039fd44182ecda8e901d5ef8a4';
 
-    // Helper to fetch JSON
     async function fetchJSON(url) {
       const res = await fetch(url);
       if (!res.ok) throw new Error('Network error');
       return await res.json();
     }
 
-    // Search for the movie/series by title + year
     async function searchMovie(query) {
-      // Try to extract year if present at end
       let year = '';
       let name = query.trim();
       const yearMatch = name.match(/\b(19|20)\d{2}\b$/);
@@ -138,26 +63,21 @@
         year = yearMatch[0];
         name = name.replace(/\b(19|20)\d{2}\b$/, '').trim();
       }
-      // Search movies first
       let url = `https://api.themoviedb.org/3/search/movie?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(name)}${year ? '&year=' + year : ''}`;
       let data = await fetchJSON(url);
-      if (data.results && data.results.length) return {type: 'movie', id: data.results[0].id, year: data.results[0].release_date?.slice(0,4) || year};
-      // If not found, search TV
+      if (data.results && data.results.length) return {type: 'movie', id: data.results[0].id, data: data.results[0]};
       url = `https://api.themoviedb.org/3/search/tv?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(name)}${year ? '&first_air_date_year=' + year : ''}`;
       data = await fetchJSON(url);
-      if (data.results && data.results.length) return {type: 'tv', id: data.results[0].id, year: data.results[0].first_air_date?.slice(0,4) || year};
+      if (data.results && data.results.length) return {type: 'tv', id: data.results[0].id, data: data.results[0]};
       throw new Error('Movie/Series not found');
     }
 
-    // Get cast list
-    async function getCast(type, id) {
-      let url = `https://api.themoviedb.org/3/${type === 'movie' ? 'movie' : 'tv'}/${id}/credits?api_key=${TMDB_API_KEY}`;
-      const data = await fetchJSON(url);
-      return data.cast || [];
+    async function getMovieDetails(type, id) {
+      let url = `https://api.themoviedb.org/3/${type === 'movie' ? 'movie' : 'tv'}/${id}?api_key=${TMDB_API_KEY}&append_to_response=credits`;
+      return await fetchJSON(url);
     }
 
-    // Get actor short info (bio)
-    async function getActorInfo(personId) {
+    async function getPersonBio(personId) {
       let url = `https://api.themoviedb.org/3/person/${personId}?api_key=${TMDB_API_KEY}`;
       try {
         const data = await fetchJSON(url);
@@ -167,45 +87,84 @@
       }
     }
 
-    // Render cast cards
-    async function renderCast(cast, limit=12) {
-      const castResult = document.getElementById('castResult');
-      if (!cast.length) {
-        castResult.innerHTML = `<p style="text-align:center;color:#f00;">No cast found.</p>`;
-        return;
-      }
-      // Show only leading actors (top 12 billed)
-      let html = `<div class="cast-list">`;
-      for (let i = 0; i < Math.min(limit, cast.length); ++i) {
-        const actor = cast[i];
-        const photo = actor.profile_path ? `https://image.tmdb.org/t/p/w185${actor.profile_path}` : 'https://via.placeholder.com/90x90?text=No+Photo';
-        let info = await getActorInfo(actor.id);
-        if (!info) info = 'No info available.';
-        html += `
-          <div class="cast-card">
-            <img src="${photo}" alt="${actor.name}" class="cast-photo">
-            <div class="cast-name">${actor.name}</div>
-            <div class="cast-character">${actor.character || ''}</div>
-            <div class="cast-info">${info}</div>
-          </div>
-        `;
-      }
-      html += `</div>`;
-      castResult.innerHTML = html;
+    function getCrewInfo(credits, job) {
+      return (credits.crew||[]).filter(c => c.job === job).map(c => c.name).join(', ') || '-';
+    }
+    function getStudioInfo(details) {
+      if (details.production_companies && details.production_companies.length)
+        return details.production_companies.map(c => c.name).join(', ');
+      if (details.networks && details.networks.length)
+        return details.networks.map(n => n.name).join(', ');
+      return '-';
     }
 
-    // Main handler
+    async function renderMovieInfo(details, type) {
+      const poster = details.poster_path ? `https://image.tmdb.org/t/p/w300${details.poster_path}` : 'https://via.placeholder.com/120x180?text=No+Poster';
+      const title = type === 'movie' ? details.title : details.name;
+      const year = (type === 'movie' ? details.release_date : details.first_air_date || '').slice(0,4);
+      const director = getCrewInfo(details.credits, 'Director');
+      const producer = getCrewInfo(details.credits, 'Producer');
+      const studio = getStudioInfo(details);
+      const summary = details.overview || '';
+      const rating = details.vote_average ? `${details.vote_average.toFixed(1)} / 10` : '-';
+      return `
+        <div class="movie-info">
+          <img src="${poster}" class="movie-poster" alt="Poster">
+          <div class="movie-details">
+            <div class="movie-title">${title} <span class="movie-meta">(${year})</span></div>
+            <div class="movie-meta"><b>Director:</b> ${director || '-'}</div>
+            <div class="movie-meta"><b>Producer:</b> ${producer || '-'}</div>
+            <div class="movie-meta"><b>Studio:</b> ${studio}</div>
+            <div class="movie-summary">${summary}</div>
+            <div class="movie-rating">⭐ ${rating}</div>
+          </div>
+        </div>
+      `;
+    }
+
+    async function renderCastList(cast) {
+      if (!cast.length) return `<p style="text-align:center;color:#f00;">No cast found.</p>`;
+      let html = '';
+      for (let i = 0; i < cast.length; ++i) {
+        const actor = cast[i];
+        const photo = actor.profile_path ? `https://image.tmdb.org/t/p/w185${actor.profile_path}` : 'https://via.placeholder.com/70x70?text=No+Photo';
+        let bio = '';
+        if (i < 10) { // Only fetch bio for first 10 for speed
+          bio = await getPersonBio(actor.id);
+        }
+        html += `
+          <details>
+            <summary>
+              <span style="margin-right:10px;">
+                <img src="${photo}" alt="${actor.name}" class="cast-photo">
+              </span>
+              ${actor.name} <span style="color:#4a90e2;font-size:0.95rem;margin-left:6px;">as ${actor.character||''}</span>
+            </summary>
+            <div class="cast-content">
+              <div class="cast-info">
+                <div class="cast-bio">${bio || 'No info available.'}</div>
+              </div>
+            </div>
+          </details>
+        `;
+      }
+      return html;
+    }
     document.getElementById('searchForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const query = document.getElementById('movieInput').value.trim();
+      const movieResult = document.getElementById('movieResult');
       const castResult = document.getElementById('castResult');
-      castResult.innerHTML = `<p style="text-align:center;color:#4a90e2;">Loading...</p>`;
+      movieResult.innerHTML = `<p style="text-align:center;color:#4a90e2;">Loading...</p>`;
+      castResult.innerHTML = '';
       try {
         const found = await searchMovie(query);
-        const cast = await getCast(found.type, found.id);
-        await renderCast(cast);
+        const details = await getMovieDetails(found.type, found.id);
+        movieResult.innerHTML = await renderMovieInfo(details, found.type);
+        let cast = (details.credits && details.credits.cast) ? details.credits.cast.slice(0, 12) : [];
+        castResult.innerHTML = await renderCastList(cast);
       } catch (err) {
-        castResult.innerHTML = `<p style="text-align:center;color:#f00;">${err.message}</p>`;
+        movieResult.innerHTML = `<p style="text-align:center;color:#f00;">${err.message}</p>`;
       }
     });
   </script>
