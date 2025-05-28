@@ -2,14 +2,84 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Movie/Series Cast & Info</title>
+  <title>CAST_FINDER</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body { background: #f6f8fa; font-family: 'Poppins', Arial, sans-serif; margin: 0; }
-    .container { max-width: 700px; margin: 30px auto; background: #fff; border-radius: 14px; box-shadow: 0 8px 32px rgba(0,0,0,0.13); padding: 20px 10px 30px 10px;}
+    .container { max-width: 750px; margin: 30px auto; background: #fff; border-radius: 14px; box-shadow: 0 8px 32px rgba(0,0,0,0.13); padding: 20px 10px 30px 10px;}
+    .site-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+      margin-bottom: 28px;
+      margin-top: 18px;
+      user-select: none;
+    }
+    .site-logo {
+      width: 68px;
+      height: 68px;
+      min-width: 68px;
+      min-height: 68px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #4a90e2 60%, #f5a623 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 8px rgba(74,144,226,0.09);
+    }
+    .site-logo span {
+      color: #fff;
+      font-size: 2.7rem;
+      font-weight: 900;
+      font-family: 'Poppins', Arial, sans-serif;
+      letter-spacing: 1px;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.10);
+      line-height: 1;
+      margin-top: 3px;
+    }
+    .site-title {
+      font-size: 2.6rem;
+      font-weight: 900;
+      color: #222;
+      letter-spacing: 2px;
+      margin: 0;
+      text-shadow: 0 2px 8px rgba(74,144,226,0.10);
+    }
     .search-bar { display: flex; gap: 8px; margin-bottom: 20px; }
     .search-bar input { flex: 1; padding: 12px; border-radius: 8px; border: 2px solid #4a90e2; font-size: 1rem; }
-    .search-bar button { background: #4a90e2; color: #fff; border: none; border-radius: 8px; padding: 0 16px; font-size: 1.2rem; cursor: pointer;}
+    .search-bar button {
+      background: #4a90e2;
+      color: #fff;
+      border: none;
+      width: 48px;
+      border-radius: 8px;
+      padding: 0;
+      font-size: 1.2rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+    .search-bar button:hover {
+      background: #357abd;
+    }
+    .search-icon {
+      width: 24px;
+      height: 24px;
+      object-fit: contain;
+      display: block;
+    }
+    .results-list { margin-bottom: 30px;}
+    .results-section-title { font-weight: 600; font-size: 1.1rem; color: #4a90e2; margin: 18px 0 8px 0;}
+    .result-item { display: flex; align-items: center; gap: 12px; background: #f9fafc; border-radius: 8px; margin-bottom: 7px; padding: 7px 10px; cursor: pointer; transition: background 0.15s;}
+    .result-item:hover { background: #e6f0fa;}
+    .result-poster { width: 44px; height: 63px; object-fit: cover; border-radius: 6px; background: #ddd; border: 1.5px solid #4a90e2;}
+    .result-info { flex: 1;}
+    .result-title { font-weight: 600; color: #222; font-size: 1.06rem;}
+    .result-meta { color: #666; font-size: 0.97rem;}
+    .result-type { font-size: 0.85rem; font-weight: 700; border-radius: 6px; padding: 2px 8px; margin-left: 10px; background: #4a90e2; color: #fff; }
     .movie-info { display: flex; gap: 18px; margin-bottom: 20px; align-items: flex-start; }
     .movie-poster { width: 120px; border-radius: 10px; box-shadow: 0 2px 8px rgba(74,144,226,0.09);}
     .movie-details { flex: 1; }
@@ -20,7 +90,7 @@
     .cast-list { margin-top: 10px;}
     details { background: #f9fafc; border-radius: 8px; margin-bottom: 10px; box-shadow: 0 1px 5px rgba(74,144,226,0.06);}
     summary { cursor: pointer; display: flex; align-items: center; font-size: 1.05rem; font-weight: 500; padding: 12px; outline: none; }
-    summary::after { content: '▶'; margin-left: auto; transition: transform 0.2s; }
+    summary::after { content: '\25B6'; margin-left: auto; transition: transform 0.2s; } /* Unicode triangle ▶ */
     details[open] summary::after { transform: rotate(90deg);}
     .cast-content { display: flex; gap: 14px; padding: 10px 14px 14px 14px; }
     .cast-photo { width: 70px; height: 70px; border-radius: 50%; object-fit: cover; border: 2px solid #4a90e2; background: #e0e0e0;}
@@ -28,55 +98,91 @@
     .cast-name { font-weight: 600; color: #222; font-size: 1.06rem;}
     .cast-character { color: #4a90e2; font-size: 0.98rem; margin-bottom: 5px;}
     .cast-bio { color: #555; font-size: 0.95rem;}
+    .back-btn { display: inline-block; margin-bottom: 14px; padding: 7px 14px; background: #4a90e2; color: #fff; border: none; border-radius: 7px; font-size: 1rem; cursor: pointer; }
     @media (max-width: 600px) {
       .container { padding: 6px 2vw 16px 2vw;}
+      .site-header { flex-direction: column; gap: 8px; }
+      .site-logo { width: 48px; height: 48px; min-width: 48px; min-height: 48px;}
+      .site-logo span { font-size: 1.7rem;}
+      .site-title { font-size: 1.6rem;}
       .movie-info { flex-direction: column; gap: 10px;}
       .movie-poster { width: 90px;}
       .cast-content { flex-direction: column; align-items: flex-start;}
       .cast-photo { width: 60px; height: 60px;}
+      .result-poster { width: 35px; height: 50px;}
     }
   </style>
 </head>
 <body>
   <div class="container">
+    <div class="site-header">
+      <div class="site-logo"><span>C</span></div>
+      <div class="site-title">CAST FINDER</div>
+    </div>
     <form class="search-bar" id="searchForm" autocomplete="off">
-      <input type="text" id="movieInput" placeholder="Type movie/series name and year (e.g. Inception 2010)" required>
-      <button type="submit" title="Search">🔍</button>
+      <input type="text" id="movieInput" placeholder="Type movie/series name (e.g. Avengers)" required>
+      <button type="submit" title="Search" class="search-btn">
+        <img src="search-icon.png" alt="Search" class="search-icon">
+      </button>
     </form>
+    <div id="resultsList" class="results-list"></div>
     <div id="movieResult"></div>
     <div id="castResult" class="cast-list"></div>
   </div>
   <script>
     const TMDB_API_KEY = 'bb0bd9039fd44182ecda8e901d5ef8a4';
 
+    // Helper: fetch JSON
     async function fetchJSON(url) {
       const res = await fetch(url);
       if (!res.ok) throw new Error('Network error');
       return await res.json();
     }
 
-    async function searchMovie(query) {
-      let year = '';
-      let name = query.trim();
-      const yearMatch = name.match(/\b(19|20)\d{2}\b$/);
-      if (yearMatch) {
-        year = yearMatch[0];
-        name = name.replace(/\b(19|20)\d{2}\b$/, '').trim();
-      }
-      let url = `https://api.themoviedb.org/3/search/movie?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(name)}${year ? '&year=' + year : ''}`;
-      let data = await fetchJSON(url);
-      if (data.results && data.results.length) return {type: 'movie', id: data.results[0].id, data: data.results[0]};
-      url = `https://api.themoviedb.org/3/search/tv?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(name)}${year ? '&first_air_date_year=' + year : ''}`;
-      data = await fetchJSON(url);
-      if (data.results && data.results.length) return {type: 'tv', id: data.results[0].id, data: data.results[0]};
-      throw new Error('Movie/Series not found');
+    // Helper: get all variations for search
+    function getSearchVariations(query) {
+      query = query.trim();
+      let words = query.split(/\s+/);
+      let variations = new Set();
+      variations.add(query);
+      words.forEach(w => {
+        if (w.endsWith('s')) variations.add(query.replace(w, w.slice(0, -1)));
+        else variations.add(query.replace(w, w + 's'));
+      });
+      return Array.from(variations);
     }
 
-    async function getMovieDetails(type, id) {
-      let url = `https://api.themoviedb.org/3/${type === 'movie' ? 'movie' : 'tv'}/${id}?api_key=${TMDB_API_KEY}&append_to_response=credits`;
+    // Search both movies and TV with variations
+    async function searchAll(query) {
+      let variations = getSearchVariations(query);
+      let movies = [], tvs = [], anime = [];
+      for (let v of variations) {
+        // Movies
+        let url = `https://api.themoviedb.org/3/search/movie?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(v)}`;
+        let data = await fetchJSON(url);
+        if (data.results) movies = movies.concat(data.results);
+        // TV
+        url = `https://api.themoviedb.org/3/search/tv?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(v)}`;
+        data = await fetchJSON(url);
+        if (data.results) tvs = tvs.concat(data.results);
+      }
+      // Deduplicate by id
+      let movieMap = {}, tvMap = {};
+      movies.forEach(m => { if (!movieMap[m.id]) movieMap[m.id] = m; });
+      tvs.forEach(t => { if (!tvMap[t.id]) tvMap[t.id] = t; });
+      // Optionally, filter anime (Japanese, or genre id 16 for animation)
+      anime = Object.values(tvMap).filter(t => (t.origin_country && t.origin_country.includes('JP')) || (t.genre_ids && t.genre_ids.includes(16)));
+      tvs = Object.values(tvMap).filter(t => !anime.includes(t));
+      return {movies: Object.values(movieMap), tvs, anime};
+    }
+
+    // Get full details
+    async function getDetails(type, id) {
+      let url = `https://api.themoviedb.org/3/${type}/${id}?api_key=${TMDB_API_KEY}&append_to_response=credits`;
       return await fetchJSON(url);
     }
 
+    // Get person bio
     async function getPersonBio(personId) {
       let url = `https://api.themoviedb.org/3/person/${personId}?api_key=${TMDB_API_KEY}`;
       try {
@@ -116,7 +222,7 @@
             <div class="movie-meta"><b>Producer:</b> ${producer || '-'}</div>
             <div class="movie-meta"><b>Studio:</b> ${studio}</div>
             <div class="movie-summary">${summary}</div>
-            <div class="movie-rating">⭐ ${rating}</div>
+            <div class="movie-rating">&#9733; ${rating}</div>
           </div>
         </div>
       `;
@@ -150,21 +256,72 @@
       }
       return html;
     }
+
+    function renderResultsSection(title, results, type) {
+      if (!results.length) return '';
+      let label = (type === 'movie') ? 'Movie' : (type === 'anime' ? 'Anime' : 'Series');
+      let html = `<div class="results-section-title">${title}</div>`;
+      for (let r of results) {
+        const poster = r.poster_path ? `https://image.tmdb.org/t/p/w92${r.poster_path}` : 'https://via.placeholder.com/44x63?text=No+Poster';
+        const year = (type === 'movie' ? r.release_date : r.first_air_date || '').slice(0,4);
+        html += `
+          <div class="result-item" data-type="${type}" data-id="${r.id}">
+            <img src="${poster}" class="result-poster" alt="Poster">
+            <div class="result-info">
+              <span class="result-title">${type === 'movie' ? r.title : r.name}</span>
+              <span class="result-meta">(${year || 'N/A'})</span>
+            </div>
+            <span class="result-type">${label}</span>
+          </div>
+        `;
+      }
+      return html;
+    }
+
+    // Handle search
     document.getElementById('searchForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const query = document.getElementById('movieInput').value.trim();
+      const resultsList = document.getElementById('resultsList');
       const movieResult = document.getElementById('movieResult');
       const castResult = document.getElementById('castResult');
-      movieResult.innerHTML = `<p style="text-align:center;color:#4a90e2;">Loading...</p>`;
+      resultsList.innerHTML = `<p style="text-align:center;color:#4a90e2;">Searching...</p>`;
+      movieResult.innerHTML = '';
       castResult.innerHTML = '';
       try {
-        const found = await searchMovie(query);
-        const details = await getMovieDetails(found.type, found.id);
-        movieResult.innerHTML = await renderMovieInfo(details, found.type);
-        let cast = (details.credits && details.credits.cast) ? details.credits.cast.slice(0, 12) : [];
-        castResult.innerHTML = await renderCastList(cast);
+        const {movies, tvs, anime} = await searchAll(query);
+        let html = '';
+        html += renderResultsSection('Movies', movies, 'movie');
+        html += renderResultsSection('Series', tvs, 'tv');
+        html += renderResultsSection('Anime', anime, 'anime');
+        if (!html) html = `<p style="text-align:center;color:#f00;">No results found.</p>`;
+        resultsList.innerHTML = html;
+
+        // Add click listeners to each result
+        document.querySelectorAll('.result-item').forEach(item => {
+          item.onclick = async function() {
+            // Hide results, show back button
+            resultsList.style.display = 'none';
+            movieResult.innerHTML = `<button class="back-btn" id="backBtn">Back to results</button>`;
+            castResult.innerHTML = '';
+            let type = this.getAttribute('data-type');
+            let id = this.getAttribute('data-id');
+            if (type === 'anime') type = 'tv'; // For details, anime is tv
+            const details = await getDetails(type, id);
+            movieResult.innerHTML += await renderMovieInfo(details, type);
+            let cast = (details.credits && details.credits.cast) ? details.credits.cast.slice(0, 12) : [];
+            castResult.innerHTML = await renderCastList(cast);
+
+            // Back button
+            document.getElementById('backBtn').onclick = function() {
+              resultsList.style.display = '';
+              movieResult.innerHTML = '';
+              castResult.innerHTML = '';
+            };
+          }
+        });
       } catch (err) {
-        movieResult.innerHTML = `<p style="text-align:center;color:#f00;">${err.message}</p>`;
+        resultsList.innerHTML = `<p style="text-align:center;color:#f00;">${err.message}</p>`;
       }
     });
   </script>
