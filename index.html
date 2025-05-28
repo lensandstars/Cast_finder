@@ -1,51 +1,152 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>CAST_FINDER</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    body { background: #f6f8fa; font-family: 'Poppins', Arial, sans-serif; margin: 0; }
-    .container { max-width: 750px; margin: 30px auto; background: #fff; border-radius: 14px; box-shadow: 0 8px 32px rgba(0,0,0,0.13); padding: 20px 10px 30px 10px;}
+    :root {
+      --bg-overlay: rgba(255,255,255,0.7);
+      --bg-overlay-dark: rgba(24,28,36,0.55);
+      --logo-border-light: #222;
+      --logo-border-dark: #fff;
+      --logo-text-light: #222;
+      --logo-text-dark: #fff;
+    }
+    body {
+      min-height: 100vh;
+      margin: 0;
+      font-family: 'Poppins', Arial, sans-serif;
+      color: #222;
+      background: 
+        linear-gradient(var(--bg-overlay), var(--bg-overlay)),
+        url('background.jpg') center/cover no-repeat fixed;
+      transition: background 0.3s;
+    }
+    body.dark {
+      color: #f5f5f5;
+      background:
+        linear-gradient(var(--bg-overlay-dark), var(--bg-overlay-dark)),
+        url('background.jpg') center/cover no-repeat fixed;
+    }
+
+    /* Theme Toggle Button */
+    .theme-toggle-btn {
+      position: fixed;
+      top: 24px;
+      right: 32px;
+      z-index: 999;
+      background: rgba(255,255,255,0.7);
+      border: none;
+      border-radius: 50%;
+      width: 44px;
+      height: 44px;
+      font-size: 1.7rem;
+      cursor: pointer;
+      color: #222;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s, color 0.2s;
+    }
+    .theme-toggle-btn:hover {
+      background: #f5a623;
+      color: #fff;
+    }
+    body.dark .theme-toggle-btn {
+      background: rgba(24,28,36,0.85);
+      color: #fff;
+    }
+    body.dark .theme-toggle-btn:hover {
+      background: #4a90e2;
+      color: #fff;
+    }
+
+    /* Container */
+    .container {
+      max-width: 750px;
+      margin: 60px auto 30px auto;
+      background: transparent;
+      border-radius: 14px;
+      box-shadow: none;
+      padding: 20px 10px 30px 10px;
+    }
+
+    /* Header Row */
     .site-header {
       display: flex;
       align-items: center;
-      justify-content: center;
-      gap: 18px;
+      gap: 24px;
       margin-bottom: 28px;
       margin-top: 18px;
       user-select: none;
+      justify-content: flex-start;
     }
+
+    /* Logo */
     .site-logo {
-      width: 68px;
-      height: 68px;
-      min-width: 68px;
-      min-height: 68px;
+      width: 88px;
+      height: 88px;
+      min-width: 88px;
+      min-height: 88px;
       border-radius: 50%;
-      background: linear-gradient(135deg, #4a90e2 60%, #f5a623 100%);
+      border: 3px solid var(--logo-border-light);
+      background: transparent;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 2px 8px rgba(74,144,226,0.09);
+      box-sizing: border-box;
+      margin-right: 8px;
+      transition: border 0.3s, background 0.3s;
     }
     .site-logo span {
-      color: #fff;
-      font-size: 2.7rem;
+      color: var(--logo-text-light);
+      font-size: 3.3rem;
       font-weight: 900;
       font-family: 'Poppins', Arial, sans-serif;
-      letter-spacing: 1px;
-      text-shadow: 0 2px 8px rgba(0,0,0,0.10);
+      letter-spacing: 2px;
+      text-shadow: none;
       line-height: 1;
-      margin-top: 3px;
+      margin-top: 2px;
+      transition: color 0.3s;
     }
+    body.dark .site-logo {
+      border: 3px solid var(--logo-border-dark);
+    }
+    body.dark .site-logo span {
+      color: var(--logo-text-dark);
+    }
+
+    /* Title */
     .site-title {
-      font-size: 2.6rem;
+      font-size: 3.1rem;
       font-weight: 900;
-      color: #222;
+      color: inherit;
       letter-spacing: 2px;
       margin: 0;
       text-shadow: 0 2px 8px rgba(74,144,226,0.10);
+      display: block;
+      line-height: 1.1;
     }
+
+    /* Subtitle */
+    .site-subtitle {
+      font-size: 0.75rem;
+      color: #888;
+      font-weight: 500;
+      margin-top: 7px;
+      margin-left: 60px;
+      letter-spacing: 1px;
+      text-align: left;
+      white-space: nowrap;
+      transition: color 0.3s;
+    }
+    body.dark .site-subtitle {
+      color: #ccc;
+    }
+
+    /* Search Bar */
     .search-bar { display: flex; gap: 8px; margin-bottom: 20px; }
     .search-bar input { flex: 1; padding: 12px; border-radius: 8px; border: 2px solid #4a90e2; font-size: 1rem; }
     .search-bar button {
@@ -90,7 +191,7 @@
     .cast-list { margin-top: 10px;}
     details { background: #f9fafc; border-radius: 8px; margin-bottom: 10px; box-shadow: 0 1px 5px rgba(74,144,226,0.06);}
     summary { cursor: pointer; display: flex; align-items: center; font-size: 1.05rem; font-weight: 500; padding: 12px; outline: none; }
-    summary::after { content: '\25B6'; margin-left: auto; transition: transform 0.2s; } /* Unicode triangle ▶ */
+    summary::after { content: '\25B6'; margin-left: auto; transition: transform 0.2s; }
     details[open] summary::after { transform: rotate(90deg);}
     .cast-content { display: flex; gap: 14px; padding: 10px 14px 14px 14px; }
     .cast-photo { width: 70px; height: 70px; border-radius: 50%; object-fit: cover; border: 2px solid #4a90e2; background: #e0e0e0;}
@@ -99,25 +200,63 @@
     .cast-character { color: #4a90e2; font-size: 0.98rem; margin-bottom: 5px;}
     .cast-bio { color: #555; font-size: 0.95rem;}
     .back-btn { display: inline-block; margin-bottom: 14px; padding: 7px 14px; background: #4a90e2; color: #fff; border: none; border-radius: 7px; font-size: 1rem; cursor: pointer; }
-    @media (max-width: 600px) {
+    @media (max-width: 900px) {
       .container { padding: 6px 2vw 16px 2vw;}
-      .site-header { flex-direction: column; gap: 8px; }
-      .site-logo { width: 48px; height: 48px; min-width: 48px; min-height: 48px;}
-      .site-logo span { font-size: 1.7rem;}
-      .site-title { font-size: 1.6rem;}
+      .site-header { gap: 12px; }
+      .site-logo { width: 60px; height: 60px; min-width: 60px; min-height: 60px;}
+      .site-logo span { font-size: 2.1rem;}
+      .site-title { font-size: 2rem;}
       .movie-info { flex-direction: column; gap: 10px;}
       .movie-poster { width: 90px;}
       .cast-content { flex-direction: column; align-items: flex-start;}
       .cast-photo { width: 60px; height: 60px;}
       .result-poster { width: 35px; height: 50px;}
+      .site-subtitle { margin-left: 30px; }
+      .theme-toggle-btn { top: 12px; right: 10px; width: 38px; height: 38px; font-size: 1.2rem;}
     }
+    @media (max-width: 500px) {
+      .site-header { gap: 8px; }
+      .site-logo { width: 40px; height: 40px; min-width: 40px; min-height: 40px;}
+      .site-logo span { font-size: 1.1rem;}
+      .site-title { font-size: 1.2rem;}
+      .site-subtitle { font-size: 0.7rem; margin-left: 14px;}
+      .theme-toggle-btn { top: 6px; right: 4px; width: 32px; height: 32px; font-size: 1rem;}
+    }
+
+    /* === DARK THEME === */
+    body.dark .results-section-title { color: #f5a623; }
+    body.dark .result-item { background: #232a36; }
+    body.dark .result-item:hover { background: #2d3647; }
+    body.dark .result-type { background: #f5a623; color: #232a36; }
+body.dark .result-title,
+body.dark .movie-title {
+  color: #fff;
+}
+    body.dark .movie-info { color: #fff; }
+    body.dark .movie-meta { color: #ccc; }
+    body.dark .movie-summary { color: #bbb; }
+    body.dark .movie-rating { color: #f5a623; }
+    body.dark .cast-content { background: #222733; }
+    body.dark .cast-bio { color: #ddd; }
+    body.dark .cast-character { color: #f5a623; }
+    body.dark .cast-photo { border-color: #f5a623; }
+    body.dark .back-btn { background: #f5a623; color: #232a36; }
+    body.dark .search-bar input { border-color: #f5a623; background: #232a36; color: #fff; }
+    body.dark .search-bar button { background: #f5a623; color: #232a36; }
+    body.dark .search-bar button:hover { background: #4a90e2; color: #fff; }
+    body.dark details { background: #232a36; }
+    body.dark summary { color: #fff; }
   </style>
 </head>
 <body>
+  <button id="themeToggle" class="theme-toggle-btn" title="Toggle theme">馃寵</button>
   <div class="container">
     <div class="site-header">
       <div class="site-logo"><span>C</span></div>
-      <div class="site-title">CAST FINDER</div>
+      <div>
+        <div class="site-title">CAST FINDER</div>
+        <div class="site-subtitle">by lensandstars</div>
+      </div>
     </div>
     <form class="search-bar" id="searchForm" autocomplete="off">
       <input type="text" id="movieInput" placeholder="Type movie/series name (e.g. Avengers)" required>
@@ -130,16 +269,28 @@
     <div id="castResult" class="cast-list"></div>
   </div>
   <script>
+    // Theme Toggle
+    const themeToggleBtn = document.getElementById('themeToggle');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const savedTheme = localStorage.getItem('theme');
+    function setTheme(dark) {
+      document.body.classList.toggle('dark', dark);
+      themeToggleBtn.textContent = dark ? '鈽�锔�' : '馃寵';
+      localStorage.setItem('theme', dark ? 'dark' : 'light');
+    }
+    setTheme(savedTheme ? savedTheme === 'dark' : prefersDark);
+    themeToggleBtn.onclick = function() {
+      setTheme(!document.body.classList.contains('dark'));
+    };
+
+    // TMDB API
     const TMDB_API_KEY = 'bb0bd9039fd44182ecda8e901d5ef8a4';
 
-    // Helper: fetch JSON
     async function fetchJSON(url) {
       const res = await fetch(url);
       if (!res.ok) throw new Error('Network error');
       return await res.json();
     }
-
-    // Helper: get all variations for search
     function getSearchVariations(query) {
       query = query.trim();
       let words = query.split(/\s+/);
@@ -151,38 +302,28 @@
       });
       return Array.from(variations);
     }
-
-    // Search both movies and TV with variations
     async function searchAll(query) {
       let variations = getSearchVariations(query);
       let movies = [], tvs = [], anime = [];
       for (let v of variations) {
-        // Movies
         let url = `https://api.themoviedb.org/3/search/movie?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(v)}`;
         let data = await fetchJSON(url);
         if (data.results) movies = movies.concat(data.results);
-        // TV
         url = `https://api.themoviedb.org/3/search/tv?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(v)}`;
         data = await fetchJSON(url);
         if (data.results) tvs = tvs.concat(data.results);
       }
-      // Deduplicate by id
       let movieMap = {}, tvMap = {};
       movies.forEach(m => { if (!movieMap[m.id]) movieMap[m.id] = m; });
       tvs.forEach(t => { if (!tvMap[t.id]) tvMap[t.id] = t; });
-      // Optionally, filter anime (Japanese, or genre id 16 for animation)
       anime = Object.values(tvMap).filter(t => (t.origin_country && t.origin_country.includes('JP')) || (t.genre_ids && t.genre_ids.includes(16)));
       tvs = Object.values(tvMap).filter(t => !anime.includes(t));
       return {movies: Object.values(movieMap), tvs, anime};
     }
-
-    // Get full details
     async function getDetails(type, id) {
       let url = `https://api.themoviedb.org/3/${type}/${id}?api_key=${TMDB_API_KEY}&append_to_response=credits`;
       return await fetchJSON(url);
     }
-
-    // Get person bio
     async function getPersonBio(personId) {
       let url = `https://api.themoviedb.org/3/person/${personId}?api_key=${TMDB_API_KEY}`;
       try {
@@ -192,7 +333,6 @@
         return '';
       }
     }
-
     function getCrewInfo(credits, job) {
       return (credits.crew||[]).filter(c => c.job === job).map(c => c.name).join(', ') || '-';
     }
@@ -203,7 +343,6 @@
         return details.networks.map(n => n.name).join(', ');
       return '-';
     }
-
     async function renderMovieInfo(details, type) {
       const poster = details.poster_path ? `https://image.tmdb.org/t/p/w300${details.poster_path}` : 'https://via.placeholder.com/120x180?text=No+Poster';
       const title = type === 'movie' ? details.title : details.name;
@@ -227,7 +366,6 @@
         </div>
       `;
     }
-
     async function renderCastList(cast) {
       if (!cast.length) return `<p style="text-align:center;color:#f00;">No cast found.</p>`;
       let html = '';
@@ -235,9 +373,7 @@
         const actor = cast[i];
         const photo = actor.profile_path ? `https://image.tmdb.org/t/p/w185${actor.profile_path}` : 'https://via.placeholder.com/70x70?text=No+Photo';
         let bio = '';
-        if (i < 10) { // Only fetch bio for first 10 for speed
-          bio = await getPersonBio(actor.id);
-        }
+        if (i < 10) { bio = await getPersonBio(actor.id); }
         html += `
           <details>
             <summary>
@@ -256,7 +392,6 @@
       }
       return html;
     }
-
     function renderResultsSection(title, results, type) {
       if (!results.length) return '';
       let label = (type === 'movie') ? 'Movie' : (type === 'anime' ? 'Anime' : 'Series');
@@ -277,8 +412,6 @@
       }
       return html;
     }
-
-    // Handle search
     document.getElementById('searchForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const query = document.getElementById('movieInput').value.trim();
@@ -296,23 +429,18 @@
         html += renderResultsSection('Anime', anime, 'anime');
         if (!html) html = `<p style="text-align:center;color:#f00;">No results found.</p>`;
         resultsList.innerHTML = html;
-
-        // Add click listeners to each result
         document.querySelectorAll('.result-item').forEach(item => {
           item.onclick = async function() {
-            // Hide results, show back button
             resultsList.style.display = 'none';
             movieResult.innerHTML = `<button class="back-btn" id="backBtn">Back to results</button>`;
             castResult.innerHTML = '';
             let type = this.getAttribute('data-type');
             let id = this.getAttribute('data-id');
-            if (type === 'anime') type = 'tv'; // For details, anime is tv
+            if (type === 'anime') type = 'tv';
             const details = await getDetails(type, id);
             movieResult.innerHTML += await renderMovieInfo(details, type);
             let cast = (details.credits && details.credits.cast) ? details.credits.cast.slice(0, 12) : [];
             castResult.innerHTML = await renderCastList(cast);
-
-            // Back button
             document.getElementById('backBtn').onclick = function() {
               resultsList.style.display = '';
               movieResult.innerHTML = '';
@@ -327,3 +455,4 @@
   </script>
 </body>
 </html>
+
