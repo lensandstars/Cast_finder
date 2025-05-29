@@ -2,28 +2,41 @@
   "name": "CAST FINDER",
   "short_name": "CastFinder",
   "description": "Search and discover movie and series cast details. By lensandstars.",
-  "id": "/",
-  "start_url": "/",
-  "scope": "/",
+  "id": "/Cast_finder/",
+  "start_url": "/Cast_finder/",
+  "scope": "/Cast_finder/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#4a90e2",
   "icons": [
     {
-      "src": "/images/android-chrome-192x192.png",
+      "src": "/Cast_finder/images/android-chrome-192x192.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "/images/android-chrome-512x512.png",
+      "src": "/Cast_finder/images/android-chrome-512x512.png",
       "sizes": "512x512",
       "type": "image/png"
     },
     {
-      "src": "/images/apple-touch-icon.png",
+      "src": "/Cast_finder/images/apple-touch-icon.png",
       "sizes": "180x180",
       "type": "image/png",
       "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/Cast_finder/images/screenshot-desktop.png",
+      "sizes": "1280x800",
+      "type": "image/png",
+      "form_factor": "wide"
+    },
+    {
+      "src": "/Cast_finder/images/screenshot-mobile.png",
+      "sizes": "540x720",
+      "type": "image/png"
     }
   ]
 }
